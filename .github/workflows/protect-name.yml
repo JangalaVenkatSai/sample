@@ -1,0 +1,21 @@
+name: Protect Name
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Check if Name is Removed
+        run: |
+          if ! grep -q "Venkat Sai Jangala" README.md; then
+            echo "Name removed! Reverting..."
+            git checkout HEAD^ README.md
+            git commit -m "Auto-restored name" README.md
+            git push
+          fi
